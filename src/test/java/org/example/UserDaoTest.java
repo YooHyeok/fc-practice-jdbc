@@ -13,4 +13,7 @@ public class UserDaoTest {
         populator.addScript(new ClassPathResource("db_schema.sql")); //db-schema.sql 스크립트 파일을 class pass에서 읽어온 뒤 스크립트에 추가
         DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource()); // populator script 실행
     }
+
+
+
 }
