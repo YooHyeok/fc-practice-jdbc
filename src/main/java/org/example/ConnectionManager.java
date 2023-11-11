@@ -28,6 +28,11 @@ public class ConnectionManager {
         ds = hikariDataSource;
     }
 
+    /**
+     * DataSource로 부터 커넥션을 얻는다.
+     * @return
+     * @throws SQLException
+     */
     public static Connection getConnection() throws SQLException {
         return ds.getConnection();
 

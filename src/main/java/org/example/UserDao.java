@@ -1,5 +1,6 @@
 package org.example;
 
+
 import java.sql.*;
 
 public class UserDao {
@@ -47,26 +48,26 @@ public class UserDao {
     }
 
     public static User findByUserId(String userId) throws SQLException {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
 
-        try {
+    try {
 //            conn = getConnection();
-            conn = ConnectionManager.getConnection();
-            String sql = "SELECT userId, password, name, email FROM USERS WHERE userId = ?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, userId);
-            rs = pstmt.executeQuery();
-            User user = null;
-            if (rs.next()) {
-                user = new User(
-                        rs.getString("userId"),
-                        rs.getString("password"),
-                        rs.getString("name"),
-                        rs.getString("email")
-                );
-            }
+        conn = ConnectionManager.getConnection();
+        String sql = "SELECT userId, password, name, email FROM USERS WHERE userId = ?";
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, userId);
+        rs = pstmt.executeQuery();
+        User user = null;
+        if (rs.next()) {
+            user = new User(
+                    rs.getString("userId"),
+                    rs.getString("password"),
+                    rs.getString("name"),
+                    rs.getString("email")
+            );
+        }
             return user;
         } finally {
             if (rs != null) {
@@ -80,4 +81,21 @@ public class UserDao {
             }
         }
     }
+
+    public void create2(User user) throws SQLException {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
+
+        jdbcTemplate.executeUpdate(user, sql, new PreparedStatementSetter() {
+            @Override
+            public void setter(PreparedStatement pstmt) throws SQLException {
+                pstmt.setString(1, user.getUserId());
+                pstmt.setString(2, user.getPassword());
+                pstmt.setString(4, user.getEmail());
+                pstmt.setString(3, user.getName());
+                pstmt.executeUpdate(); //쿼리 수행
+            }
+        });
+    }
+
 }
