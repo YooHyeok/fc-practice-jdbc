@@ -22,7 +22,8 @@ public class UserDao {
         PreparedStatement pstmt = null;
 
         try {
-            conn = getConnection();
+//            conn = getConnection();
+            conn = ConnectionManager.getConnection();
             String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
 
@@ -51,7 +52,8 @@ public class UserDao {
         ResultSet rs = null;
 
         try {
-            conn = getConnection();
+//            conn = getConnection();
+            conn = ConnectionManager.getConnection();
             String sql = "SELECT userId, password, name, email FROM USERS WHERE userId = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, userId);
