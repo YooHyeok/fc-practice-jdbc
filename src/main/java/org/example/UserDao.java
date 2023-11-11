@@ -23,7 +23,7 @@ public class UserDao {
 
         try {
             conn = getConnection();
-            String sql = "INSERT INTO USERS VALUE (?, ?, ?, ?)";
+            String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
 
             // 파라미터 바인딩
