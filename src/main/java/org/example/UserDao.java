@@ -82,7 +82,7 @@ public class UserDao {
         }
     }
 
-    public void create2(User user) throws SQLException {
+    public void createRefactorAnonymous(User user) throws SQLException {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
 
@@ -98,4 +98,30 @@ public class UserDao {
         });
     }
 
+    public static User findByUserIdRefactorAnonymous(String userId) throws SQLException {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        String sql = "SELECT userId, password, name, email FROM USERS WHERE userId = ?";
+
+        return (User) jdbcTemplate.executeQuery(userId, sql,
+                new PreparedStatementSetter() {
+
+                    @Override
+                    public void setter(PreparedStatement pstmt) throws SQLException {
+                        pstmt.setString(1, userId);
+
+                    }
+                },
+                new RowMapper() {
+                    @Override
+                    public Object map(ResultSet rs) throws SQLException {
+
+                        return new User(
+                                rs.getString("userId"),
+                                rs.getString("password"),
+                                rs.getString("name"),
+                                rs.getString("email")
+                        );
+                    }
+                });
+    }
 }
