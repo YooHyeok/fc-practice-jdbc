@@ -86,7 +86,7 @@ public class UserDao {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
 
-        jdbcTemplate.executeUpdate(user, sql, new PreparedStatementSetter() {
+        jdbcTemplate.executeUpdate(sql, new PreparedStatementSetter() {
             @Override
             public void setter(PreparedStatement pstmt) throws SQLException {
                 pstmt.setString(1, user.getUserId());
@@ -102,7 +102,7 @@ public class UserDao {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         String sql = "SELECT userId, password, name, email FROM USERS WHERE userId = ?";
 
-        return (User) jdbcTemplate.executeQuery(userId, sql,
+        return (User) jdbcTemplate.executeQuery(sql,
                 new PreparedStatementSetter() {
 
                     @Override
@@ -123,5 +123,32 @@ public class UserDao {
                         );
                     }
                 });
+    }
+
+    public void createRefactorLambda(User user) throws SQLException {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
+
+        jdbcTemplate.executeUpdate(sql, pstmt -> {
+            pstmt.setString(1, user.getUserId());
+            pstmt.setString(2, user.getPassword());
+            pstmt.setString(4, user.getEmail());
+            pstmt.setString(3, user.getName());
+            pstmt.executeUpdate(); //쿼리 수행
+        });
+    }
+
+    public static User findByUserIdRefactorLambda(String userId) throws SQLException {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        String sql = "SELECT userId, password, name, email FROM USERS WHERE userId = ?";
+
+        return (User) jdbcTemplate.executeQuery(sql,
+                pstmt -> pstmt.setString(1, userId),
+                rs -> new User(
+                        rs.getString("userId"),
+                        rs.getString("password"),
+                        rs.getString("name"),
+                        rs.getString("email")
+                ));
     }
 }
